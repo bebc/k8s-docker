@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rbd-provisioner
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rbd-provisioner
+    spec:
+     # affinity:
+     #  nodeAffinity:
+     #    requiredDuringSchedulingIgnoredDuringExecution:
+     #      nodeSelectorTerms:
+     #      - matchExpressions:
+     #        - key: kubernetes.io/hostname
+     #          operator: In
+     #          values:
+     #          - k8s-uat-node1-10-8-34-128
+      containers:
+      - name: rbd-provisioner
+        image: "registry.cn-hangzhou.aliyuncs.com/bebc/rbd-provisioner:v0.1.1"
+        env:
+        - name: PROVISIONER_NAME
+          value: ceph.com/rbd
+        #volumeMounts:
+        #  - name: configfile
+        #    mountPath: /etc/ceph
+      #volumes:
+      #- name: configfile
+      #  hostPath:
+      #      path: /etc/ceph
+      serviceAccountName: rbd-provisioner
